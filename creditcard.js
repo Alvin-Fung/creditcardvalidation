@@ -27,9 +27,53 @@ const batch = [valid1, valid2, valid3, valid4, valid5, invalid1, invalid2, inval
 //Problem Two: Idenity the credit card company based on the card number's prefix.
 //Problem Three: Create a function that calls the above tasks and provides the final output.
 
-const validateCred = inputID => {
+const validateCred = (card) => {
+    //Inverse validation
+    const inverseCard = [];
+    for (var num of card) {
+        inverseCard.unshift(num);
+    }
 
 
+    //Calculations with Luhn Algorithm
+    let sum = 0;
+    for (let i = 1; i < inverseCard.length; i++) {
+        if (i % 2 === 0) {
+            inverseCard[i] >= 5 ? sum += inverseCard[i] * 2 - 9 : sum += inverseCard[i] * 2;
+        } else {
+            sum += inverseCard[i];
+        }
+    }
+    return sum % 10 === 0;
 }
 
+const findInvalidCards = (batch) => {
+    const invalidCards = [];
+    for (var card of batch) {
+        if (!validateCred(card)) {
+            invalidCards.push(card);
+        }
+        return invalidCards;
+    }
+}
+
+
+const idInvalidCardCompanies = list => {
+    switch (list[0]) {
+        case 3:
+            return 'Amex';
+        case 4:
+            return 'Visa';
+        case 5:
+            return 'Mastercard';
+        case 6:
+            return 'Discover';
+        default:
+            return 'Unknown Company.';
+    }
+}
+
+const invalidCards = findInvalidCards(batch);
+console.log(invalidCards);
+console.log(idInvalidCardCompanies(invalidCards));
 
